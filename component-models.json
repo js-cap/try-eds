@@ -142,6 +142,34 @@
     ]
   },
   {
+    "id": "bsds-button",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "text",
+        "label": "Label",
+        "value": ""
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Variant",
+        "options": [
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {

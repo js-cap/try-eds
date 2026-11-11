@@ -45,6 +45,36 @@ export function moveInstrumentation(from, to) {
   );
 }
 
+const BSDS_BASE = 'https://static.bradescoseguros.com.br/@bsds-lib-component/core/1.1.0';
+let bsdsPromise;
+
+/**
+ * Loads the Bradesco Seguros Design System (Stencil web components) once.
+ * Only blocks that use bsds-* elements should call this, keeping other pages lean.
+ * @returns {Promise<void>} resolves when the library script is loaded
+ */
+export function loadBsds() {
+  if (!bsdsPromise) {
+    bsdsPromise = (async () => {
+      await Promise.all([
+        loadCSS(`${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.css`),
+        loadCSS(`${BSDS_BASE}/css/typography.css`),
+      ]);
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.js`;
+        script.onload = resolve;
+        script.onerror = () => {
+          bsdsPromise = null; // allow retry
+          reject(new Error('Failed to load BSDS'));
+        };
+        document.head.append(script);
+      });
+    })();
+  }
+  return bsdsPromise;
+}
+
 /**
  * load fonts.css and set a session storage flag
  */

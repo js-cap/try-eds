@@ -1,0 +1,47 @@
+{
+  "definitions": [
+    {
+      "title": "BSDS Button",
+      "id": "bsds-button",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "BSDS Button",
+              "model": "bsds-button"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "bsds-button",
+      "fields": [
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Link"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "text",
+          "label": "Label",
+          "value": ""
+        },
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "label": "Variant",
+          "options": [
+            { "name": "Secondary", "value": "secondary" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
