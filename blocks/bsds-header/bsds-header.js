@@ -12,7 +12,6 @@ export default function decorate(block) {
 
   if (img) {
     const logo = document.createElement('img');
-    logo.slot = 'logo';
     logo.src = img.currentSrc || img.src;
     logo.alt = img.alt || '';
 

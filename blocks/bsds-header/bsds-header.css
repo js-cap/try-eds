@@ -1,3 +1,10 @@
+/* full-bleed: cancel the centered 1200px column/padding applied by styles.css to block wrappers */
+main .section > .bsds-header-wrapper {
+  max-width: unset;
+  margin: 0;
+  padding: 0;
+}
+
 .bsds-header bsds-simple-header {
   display: block;
 }
