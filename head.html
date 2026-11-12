@@ -7,3 +7,9 @@
 <script nonce="aem" src="/scripts/aem.js" type="module"></script>
 <script nonce="aem" src="/scripts/scripts.js" type="module"></script>
 <link rel="stylesheet" href="/styles/styles.css"/>
+<!-- BSDS: open the connection early and fetch assets in parallel (used by loadBsds in scripts.js) -->
+<link rel="preconnect" href="https://static.bradescoseguros.com.br">
+<link rel="preconnect" href="https://static.bradescoseguros.com.br" crossorigin>
+<link rel="preload" as="style" href="https://static.bradescoseguros.com.br/@bsds-lib-component/core/1.1.0/dist/bsds-lib-component/bsds-lib-component.css">
+<link rel="preload" as="style" href="https://static.bradescoseguros.com.br/@bsds-lib-component/core/1.1.0/css/typography.css">
+<link rel="preload" as="script" href="https://static.bradescoseguros.com.br/@bsds-lib-component/core/1.1.0/dist/bsds-lib-component/bsds-lib-component.js">

@@ -55,22 +55,22 @@ let bsdsPromise;
  */
 export function loadBsds() {
   if (!bsdsPromise) {
-    bsdsPromise = (async () => {
-      await Promise.all([
-        loadCSS(`${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.css`),
-        loadCSS(`${BSDS_BASE}/css/typography.css`),
-      ]);
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = `${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.js`;
-        script.onload = resolve;
-        script.onerror = () => {
-          bsdsPromise = null; // allow retry
-          reject(new Error('Failed to load BSDS'));
-        };
-        document.head.append(script);
-      });
-    })();
+    // CSS and script are requested in parallel (no waterfall)
+    const script = new Promise((resolve, reject) => {
+      const el = document.createElement('script');
+      el.src = `${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.js`;
+      el.onload = resolve;
+      el.onerror = () => {
+        bsdsPromise = null; // allow retry
+        reject(new Error('Failed to load BSDS'));
+      };
+      document.head.append(el);
+    });
+    bsdsPromise = Promise.all([
+      loadCSS(`${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.css`),
+      loadCSS(`${BSDS_BASE}/css/typography.css`),
+      script,
+    ]).then(() => {});
   }
   return bsdsPromise;
 }

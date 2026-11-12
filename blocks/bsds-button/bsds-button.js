@@ -5,7 +5,7 @@ import { loadBsds, moveInstrumentation } from '../../scripts/scripts.js';
  * Row 1: link, Row 2 (optional): label. Variant via block class: primary (default) | secondary.
  * @param {Element} block The block element
  */
-export default async function decorate(block) {
+export default function decorate(block) {
   const [linkRow, textRow] = [...block.children];
   const anchor = linkRow?.querySelector('a');
   const href = anchor?.href || linkRow?.textContent.trim();
@@ -26,10 +26,9 @@ export default async function decorate(block) {
   moveInstrumentation(block.firstElementChild || block, host);
   block.replaceChildren(host);
 
-  try {
-    await loadBsds();
-  } catch (e) {
+  // not awaited on purpose: the block must not wait for the library (keeps LCP free)
+  loadBsds().catch((e) => {
     // eslint-disable-next-line no-console
     console.error(e);
-  }
+  });
 }

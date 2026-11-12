@@ -51,7 +51,8 @@
         "bsds-button",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "bsds-header"
       ]
     }
   ]

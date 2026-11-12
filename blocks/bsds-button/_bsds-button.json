@@ -37,6 +37,7 @@
           "name": "classes",
           "label": "Variant",
           "options": [
+            { "name": "Primary", "value": "primary" },
             { "name": "Secondary", "value": "secondary" }
           ]
         }

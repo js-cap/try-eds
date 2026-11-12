@@ -162,10 +162,32 @@
         "label": "Variant",
         "options": [
           {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
             "name": "Secondary",
             "value": "secondary"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "bsds-header",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "logo",
+        "label": "Logo",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "logoAlt",
+        "label": "Texto alternativo",
+        "value": "Texto alternativo do logo"
       }
     ]
   },
