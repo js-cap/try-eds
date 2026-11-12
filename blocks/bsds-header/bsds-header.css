@@ -8,3 +8,12 @@ main .section > .bsds-header-wrapper {
 .bsds-header bsds-simple-header {
   display: block;
 }
+
+/*
+ * The component sizes the logo via ::slotted(img), but the global "main img { width: auto }"
+ * rule wins over ::slotted. Reuse the component's own --image-width (200px, 150px on mobile).
+ */
+.bsds-header bsds-simple-header img {
+  width: var(--image-width, 200px);
+  height: auto;
+}
