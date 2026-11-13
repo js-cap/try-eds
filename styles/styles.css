@@ -36,8 +36,14 @@
   --heading-font-size-s: 24px;
   --heading-font-size-xs: 22px;
 
-  /* nav height */
-  --nav-height: 64px;
+  /* nav height (matches bsds-simple-header min-height: 76px mobile, 100px from 768px) */
+  --nav-height: 76px;
+}
+
+@media (width >= 768px) {
+  :root {
+    --nav-height: 100px;
+  }
 }
 
 /* fallback fonts */
