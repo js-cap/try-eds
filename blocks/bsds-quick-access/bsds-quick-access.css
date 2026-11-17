@@ -1,0 +1,9 @@
+/*
+ * The component is styled by the BSDS library. This file only reserves the space
+ * of the bar (min-height: 48px in BSDS 1.1.0) until the library hydrates it,
+ * to avoid a layout shift.
+ */
+.bsds-quick-access bsds-quick-access:not(.hydrated) {
+  display: block;
+  min-height: 48px;
+}

@@ -135,7 +135,7 @@
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Quick Access Item",
+                  "name": "BSDS Quick Access Item",
                   "model": "bsds-quick-access-item"
                 }
               }
