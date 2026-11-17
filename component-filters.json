@@ -17,7 +17,14 @@
       "cards",
       "columns",
       "fragment",
-      "bsds-header"
+      "bsds-header",
+      "bsds-quick-access"
+    ]
+  },
+  {
+    "id": "bsds-quick-access",
+    "components": [
+      "bsds-quick-access-item"
     ]
   },
   {

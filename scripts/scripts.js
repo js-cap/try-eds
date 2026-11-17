@@ -1,6 +1,7 @@
 import {
   loadHeader,
   loadFooter,
+  getMetadata,
   decorateIcons,
   decorateSections,
   decorateBlocks,
@@ -177,11 +178,23 @@ async function loadEager(doc) {
 }
 
 /**
+ * Checks if the current page is the page used as the header fragment (default: /nav).
+ * On that page the header would load itself, rendering the content twice.
+ * @returns {boolean} true when the current page is the nav fragment page
+ */
+function isNavPage() {
+  const clean = (path) => path.replace(/(\.plain)?\.html$/, '').replace(/\/$/, '');
+  const navMeta = getMetadata('nav');
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+  return clean(window.location.pathname).endsWith(clean(navPath));
+}
+
+/**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
-  loadHeader(doc.querySelector('header'));
+  if (!isNavPage()) loadHeader(doc.querySelector('header'));
 
   const main = doc.querySelector('main');
   await loadSections(main);
@@ -190,7 +203,7 @@ async function loadLazy(doc) {
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadFooter(doc.querySelector('footer'));
+  // loadFooter(doc.querySelector('footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

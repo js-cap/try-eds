@@ -52,7 +52,8 @@
         "cards",
         "columns",
         "fragment",
-        "bsds-header"
+        "bsds-header",
+        "bsds-quick-access"
       ]
     }
   ]

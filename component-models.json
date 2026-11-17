@@ -192,6 +192,21 @@
     ]
   },
   {
+    "id": "bsds-quick-access-item",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Texto"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
