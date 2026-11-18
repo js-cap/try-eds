@@ -197,12 +197,15 @@
       {
         "component": "aem-content",
         "name": "link",
-        "label": "Link"
+        "label": "Link",
+        "required": true,
+        "description": "Em caso de url completa, sempre se lembre de inserir o protocolo 'http / https'"
       },
       {
         "component": "text",
-        "name": "Text",
-        "label": "Texto"
+        "name": "linkText",
+        "label": "Texto",
+        "required": true
       }
     ]
   },
