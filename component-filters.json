@@ -17,14 +17,7 @@
       "columns",
       "fragment",
       "bsds-header",
-      "bsds-quick-access"
-    ]
-  },
-  {
-    "id": "bsds-quick-access",
-    "components": [
-      "bsds-quick-access-item",
-      "bsds-quick-access-button"
+      "quick-access"
     ]
   },
   {
@@ -46,6 +39,13 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "quick-access",
+    "components": [
+      "quick-access-item",
+      "quick-access-button"
     ]
   }
 ]
