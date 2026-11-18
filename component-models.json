@@ -201,7 +201,7 @@
       },
       {
         "component": "text",
-        "name": "linkText",
+        "name": "Text",
         "label": "Texto"
       }
     ]
