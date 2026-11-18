@@ -13,7 +13,6 @@
       "button",
       "title",
       "hero",
-      "bsds-button",
       "cards",
       "columns",
       "fragment",
@@ -24,7 +23,8 @@
   {
     "id": "bsds-quick-access",
     "components": [
-      "bsds-quick-access-item"
+      "bsds-quick-access-item",
+      "bsds-quick-access-button"
     ]
   },
   {

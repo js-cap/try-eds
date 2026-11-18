@@ -142,38 +142,6 @@
     ]
   },
   {
-    "id": "bsds-button",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "link",
-        "label": "Link"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "text",
-        "label": "Label",
-        "value": ""
-      },
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Variant",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "bsds-header",
     "fields": [
       {
@@ -192,6 +160,47 @@
     ]
   },
   {
+    "id": "bsds-quick-access",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Cor",
+        "value": "primary",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Success",
+            "value": "success"
+          },
+          {
+            "name": "Warning",
+            "value": "warning"
+          },
+          {
+            "name": "Danger",
+            "value": "danger"
+          },
+          {
+            "name": "Info",
+            "value": "info"
+          },
+          {
+            "name": "Neutral",
+            "value": "neutral"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bsds-quick-access-item",
     "fields": [
       {
@@ -206,6 +215,41 @@
         "name": "linkText",
         "label": "Texto",
         "required": true
+      }
+    ]
+  },
+  {
+    "id": "bsds-quick-access-button",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link",
+        "required": true,
+        "description": "Em caso de url completa, sempre se lembre de inserir o protocolo 'http / https'"
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Texto",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "fill",
+        "label": "Preenchimento",
+        "value": "solid",
+        "required": true,
+        "options": [
+          {
+            "name": "Sólido",
+            "value": "solid"
+          },
+          {
+            "name": "Contorno",
+            "value": "outline"
+          }
+        ]
       }
     ]
   },

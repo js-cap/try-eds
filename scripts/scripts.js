@@ -1,6 +1,5 @@
 import {
   loadHeader,
-  loadFooter,
   getMetadata,
   decorateIcons,
   decorateSections,
@@ -57,12 +56,11 @@ let bsdsPromise;
 export function loadBsds() {
   if (!bsdsPromise) {
     // CSS and script are requested in parallel (no waterfall)
-    // ES module entry: modern build that bootstraps the components by itself
-    // (the classic bsds-lib-component.js is the legacy ES5 fallback, removed in newer versions)
+    // classic script on purpose: the CDN does not send CORS headers, which ES modules
+    // (bsds-lib-component.esm.js) require
     const script = new Promise((resolve, reject) => {
       const el = document.createElement('script');
-      el.type = 'module';
-      el.src = `${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.esm.js`;
+      el.src = `${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.js`;
       el.onload = resolve;
       el.onerror = () => {
         bsdsPromise = null; // allow retry
