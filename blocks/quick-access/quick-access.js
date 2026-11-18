@@ -36,11 +36,14 @@ function createItem(row) {
 }
 
 /**
- * Builds a <bsds-button> (rendered in the "end" slot) from a row.
+ * Builds a <bsds-button> wrapped in a <div slot="end"> from a row.
+ * The Universal Editor instrumentation goes on the wrapper, not on the button: on mobile,
+ * BSDS 1.1.0 copies the end-slot buttons into its accordion with cloneNode(true), which would
+ * duplicate the data-aue-* attributes (and the item in the Content Tree).
  * @param {Element} row The block row
  * @param {string} fill solid | outline
  * @param {string} [color] BSDS color
- * @returns {Element} the button
+ * @returns {Element} the wrapper holding the button
  */
 function createButton(row, fill, color) {
   const link = row.querySelector('a');
@@ -49,8 +52,12 @@ function createButton(row, fill, color) {
   button.setAttribute('fill', fill);
   if (color) button.setAttribute('color', color);
   button.textContent = link?.textContent.trim() || 'Novo botão';
-  moveInstrumentation(row, button);
-  return button;
+
+  const wrapper = document.createElement('div');
+  wrapper.slot = 'end';
+  wrapper.append(button);
+  moveInstrumentation(row, wrapper);
+  return wrapper;
 }
 
 /**
@@ -62,16 +69,14 @@ export default function decorate(block) {
   const quickAccess = document.createElement('bsds-quick-access');
   if (color) quickAccess.setAttribute('color', color);
 
-  const end = document.createElement('div');
-  end.slot = 'end';
-
+  // buttons are appended after the items, each one in its own <div slot="end">
+  const buttons = [];
   [...block.children].forEach((row) => {
     const fill = getFill(row);
-    if (fill) end.append(createButton(row, fill, color));
+    if (fill) buttons.push(createButton(row, fill, color));
     else quickAccess.append(createItem(row));
   });
-
-  if (end.children.length) quickAccess.append(end);
+  quickAccess.append(...buttons);
 
   // the component (1.1.0) reads its children once on load: append it only when complete
   block.replaceChildren(quickAccess);

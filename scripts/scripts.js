@@ -49,6 +49,28 @@ const BSDS_BASE = 'https://static.bradescoseguros.com.br/@bsds-lib-component/cor
 let bsdsPromise;
 
 /**
+ * Applies a stylesheet once. loadCSS() from aem.js can't be used for the BSDS files:
+ * it skips any <link> with the same href, including the rel="preload" links of head.html,
+ * so the stylesheet would be downloaded but never applied.
+ * @param {string} href URL to the CSS file
+ * @returns {Promise<void>} resolves when the stylesheet is loaded
+ */
+function loadStylesheet(href) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`head > link[rel="stylesheet"][href="${href}"]`)) {
+      resolve();
+      return;
+    }
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.onload = () => resolve();
+    link.onerror = reject;
+    document.head.append(link);
+  });
+}
+
+/**
  * Loads the Bradesco Seguros Design System (Stencil web components) once.
  * Only blocks that use bsds-* elements should call this, keeping other pages lean.
  * @returns {Promise<void>} resolves when the library script is loaded
@@ -69,8 +91,8 @@ export function loadBsds() {
       document.head.append(el);
     });
     bsdsPromise = Promise.all([
-      loadCSS(`${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.css`),
-      loadCSS(`${BSDS_BASE}/css/typography.css`),
+      loadStylesheet(`${BSDS_BASE}/dist/bsds-lib-component/bsds-lib-component.css`),
+      loadStylesheet(`${BSDS_BASE}/css/typography.css`),
       script,
     ]).then(() => {});
   }
