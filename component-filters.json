@@ -21,6 +21,12 @@
     ]
   },
   {
+    "id": "banner",
+    "components": [
+      "banner-button"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"

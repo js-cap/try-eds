@@ -1,0 +1,99 @@
+{
+  "definitions": [
+    {
+      "title": "BSDS Banner",
+      "id": "banner",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "BSDS Banner",
+              "model": "banner",
+              "filter": "banner"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Banner Button",
+      "id": "banner-button",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Banner Button",
+              "model": "banner-button"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "banner",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "desktopImg",
+          "label": "Imagem Desktop"
+        },
+        {
+            "component": "text",
+            "name": "highlight",
+            "label": "Destaque"
+        },
+        {
+            "component": "text",
+            "name": "title",
+            "label": "Título"
+        },
+        {
+            "component": "text",
+            "name": "desktopImgAlt",
+            "label": "Texto alternativo"
+        }
+      ]
+    },
+    {
+      "id": "banner-button",
+      "fields": [
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Link",
+          "required": true,
+          "description": "Em caso de url completa, sempre se lembre de inserir o protocolo 'http / https'"
+        },
+        {
+          "component": "text",
+          "name": "linkText",
+          "label": "Texto",
+          "required": true
+        },
+        {
+          "component": "select",
+          "name": "fill",
+          "label": "Preenchimento",
+          "value": "solid",
+          "required": true,
+          "options": [
+            { "name": "Sólido", "value": "solid" },
+            { "name": "Contorno", "value": "outline" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "banner",
+      "components": [
+        "banner-button"
+      ]
+    }
+  ]
+}

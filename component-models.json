@@ -142,6 +142,66 @@
     ]
   },
   {
+    "id": "banner",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "desktopImg",
+        "label": "Imagem Desktop"
+      },
+      {
+        "component": "text",
+        "name": "highlight",
+        "label": "Destaque"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título"
+      },
+      {
+        "component": "text",
+        "name": "desktopImgAlt",
+        "label": "Texto alternativo"
+      }
+    ]
+  },
+  {
+    "id": "banner-button",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link",
+        "required": true,
+        "description": "Em caso de url completa, sempre se lembre de inserir o protocolo 'http / https'"
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Texto",
+        "required": true
+      },
+      {
+        "component": "select",
+        "name": "fill",
+        "label": "Preenchimento",
+        "value": "solid",
+        "required": true,
+        "options": [
+          {
+            "name": "Sólido",
+            "value": "solid"
+          },
+          {
+            "name": "Contorno",
+            "value": "outline"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bsds-header",
     "fields": [
       {
