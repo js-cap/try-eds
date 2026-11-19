@@ -1,4 +1,83 @@
-/* the header content (bsds-header) styles itself; this file only has to exist for the block loader */
 header .header {
   width: 100%;
+}
+
+/* the menu row makes the header taller than --nav-height (styles.css): let it grow */
+body > header {
+  height: auto;
+  min-height: var(--nav-height);
+}
+
+/* menu built by header.js from the bulleted list authored in /nav */
+.header .header-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header .header-nav > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.header .header-nav > ul > li {
+  position: relative;
+}
+
+.header .header-nav a,
+.header .header-nav button {
+  color: var(--bsds-color-text, #414244);
+  font: inherit;
+  text-decoration: none;
+}
+
+.header .header-nav button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 8px 0;
+  background: none;
+  cursor: pointer;
+}
+
+.header .header-nav button bsds-icon {
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.header .header-nav button[aria-expanded='true'] {
+  color: var(--bsds-color-primary-surface, #cc092f);
+}
+
+/* arrow points up while the submenu is open */
+.header .header-nav button[aria-expanded='true'] bsds-icon {
+  transform: rotate(180deg);
+}
+
+/* submenu: hidden until the button before it is expanded */
+.header .header-nav li > ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  min-width: 200px;
+  padding: 8px 0;
+  background: var(--bsds-color-surface-default, #fff);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+}
+
+.header .header-nav button[aria-expanded='true'] + ul {
+  display: block;
+}
+
+.header .header-nav li > ul a {
+  display: block;
+  padding: 8px 16px;
+}
+
+.header .header-nav li > ul a:hover {
+  background: var(--bsds-color-surface-alternative, #f1f1f1);
 }
