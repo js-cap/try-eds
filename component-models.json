@@ -151,6 +151,11 @@
       },
       {
         "component": "text",
+        "name": "caption",
+        "label": "Imagem Desktop"
+      },
+      {
+        "component": "text",
         "name": "highlight",
         "label": "Destaque"
       },
@@ -158,6 +163,11 @@
         "component": "text",
         "name": "title",
         "label": "Título"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Descrição"
       },
       {
         "component": "text",
