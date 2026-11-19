@@ -1,6 +1,9 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+// ":icon-atend-celular:" (or ":atend-celular:") at the start of a label
+const ICON_TOKEN = /^\s*:([a-z0-9-]+):\s*/i;
+
 /**
  * Closes every open submenu, except the one controlled by "except".
  * @param {Element} nav The menu
@@ -13,22 +16,81 @@ function closeAll(nav, except) {
 }
 
 /**
- * Creates the BSDS arrow used in the toggle buttons.
- * Decorative: the open/closed state is given by aria-expanded on the button.
+ * Creates a decorative BSDS icon.
+ * @param {string} name BSDS icon name (file name in the library "svg" folder)
  * @returns {Element} the <bsds-icon>
  */
-function createArrow() {
-  const arrow = document.createElement('bsds-icon');
-  arrow.setAttribute('name', 'icon-seta-baixo');
-  arrow.setAttribute('aria-hidden', 'true');
-  return arrow;
+function createIcon(name) {
+  const icon = document.createElement('bsds-icon');
+  icon.setAttribute('name', name);
+  icon.setAttribute('aria-hidden', 'true');
+  return icon;
 }
 
 /**
- * Turns the authored nested list into a menu. A first-level item with a sublist becomes
- * a toggle button (it only opens the submenu, it doesn't navigate: a link authored on its
- * label is dropped). A first-level item without a sublist stays as it was authored.
- * The list itself is not rebuilt: the authored <ul>/<li> are reused as they are.
+ * Reads the label of a list item: the text before its sublist, plus an optional icon
+ * authored with the ":icon-name:" convention.
+ * Two forms are handled, because the backend may or may not have converted the token:
+ * - plain text ":icon-atend-celular: Canais Digitais"
+ * - <span class="icon icon-icon-atend-celular"> (the EDS icon markup, already filled with an
+ *   <img> pointing to /icons/... by decorateIcons): the span is removed
+ * The "icon-" prefix of the BSDS names is optional: ":atend-celular:" works too.
+ * @param {Element} item The <li>
+ * @param {Element} [sublist] The nested <ul> of the item, excluded from the label
+ * @returns {{text: string, icon: (string|undefined)}} the label text and icon name
+ */
+function readLabel(item, sublist) {
+  const nodes = [...item.childNodes].filter((node) => node !== sublist);
+
+  let icon;
+  const span = nodes
+    .filter((node) => node.nodeType === Node.ELEMENT_NODE)
+    .map((el) => (el.matches('span.icon') ? el : el.querySelector('span.icon')))
+    .find(Boolean);
+  if (span) {
+    icon = [...span.classList].find((c) => c.startsWith('icon-'))?.substring(5);
+    span.remove();
+  }
+
+  let text = nodes.map((node) => node.textContent).join('').trim();
+  const token = text.match(ICON_TOKEN);
+  if (token) {
+    icon = icon || token[1];
+    text = text.slice(token[0].length).trim();
+  }
+
+  if (icon && !icon.startsWith('icon-')) icon = `icon-${icon}`;
+  return { text, icon };
+}
+
+/**
+ * Turns a second-level list into a panel with columns. Each second-level item is a column:
+ * its label (with the optional icon) becomes the column title, its sublist the column links.
+ * @param {Element} submenu The second-level <ul>
+ */
+function buildPanel(submenu) {
+  submenu.classList.add('header-nav-panel');
+  [...submenu.children].forEach((group) => {
+    const links = group.querySelector(':scope > ul');
+    const { text, icon } = readLabel(group, links);
+
+    const title = document.createElement('p');
+    title.className = 'header-nav-group-title';
+    if (icon) title.append(createIcon(icon));
+    title.append(text);
+
+    group.replaceChildren(...[title, links].filter(Boolean));
+  });
+}
+
+/**
+ * Turns the authored nested list into a menu.
+ * - first-level item with a sublist: a toggle button (it only opens the submenu; a link
+ *   authored on its label is dropped)
+ *   - sublist with a third level: panel with columns (second level = column title)
+ *   - sublist with only two levels: simple dropdown
+ * - first-level item without a sublist: stays as it was authored
+ * The list itself is not rebuilt: the authored <ul>/<li> are reused.
  * @param {Element} list The authored <ul>
  * @returns {Element} the <nav>
  */
@@ -40,18 +102,16 @@ function buildNav(list) {
 
   list.querySelectorAll(':scope > li').forEach((item, i) => {
     const submenu = item.querySelector(':scope > ul');
-    if (!submenu) return;
+    if (!submenu) {
+      item.querySelector('a')?.classList.add('header-nav-top');
+      return;
+    }
 
     const button = document.createElement('button');
     button.type = 'button';
-    // the label is everything before the nested list ("Produtos"); textContent also keeps
-    // the text of a link the author may have put on it, without the link itself
-    button.textContent = [...item.childNodes]
-      .filter((node) => node !== submenu)
-      .map((node) => node.textContent)
-      .join('')
-      .trim();
-    button.append(createArrow());
+    button.className = 'header-nav-top';
+    button.textContent = readLabel(item, submenu).text;
+    button.append(createIcon('icon-seta-baixo'));
     button.setAttribute('aria-expanded', 'false');
     submenu.id = `header-submenu-${i}`;
     button.setAttribute('aria-controls', submenu.id);
@@ -60,6 +120,14 @@ function buildNav(list) {
       closeAll(nav, button);
       button.setAttribute('aria-expanded', String(!open));
     });
+
+    const hasColumns = [...submenu.children].some((child) => child.querySelector(':scope > ul'));
+    if (hasColumns) {
+      buildPanel(submenu);
+      item.classList.add('header-nav-mega');
+    } else {
+      submenu.classList.add('header-nav-dropdown');
+    }
 
     item.replaceChildren(button, submenu);
   });

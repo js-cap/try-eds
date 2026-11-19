@@ -2,13 +2,23 @@ header .header {
   width: 100%;
 }
 
-/* on smaller screens the menu row makes the header taller than --nav-height: let it grow */
+/*
+ * - position: containing block of the full-width panels (they are placed against the header)
+ * - height: on smaller screens the menu row makes the header taller than --nav-height
+ */
 body > header {
+  position: relative;
+  z-index: 10;
   height: auto;
   min-height: var(--nav-height);
 }
 
-/* menu built by header.js from the bulleted list authored in /nav (BSDS tokens, with fallbacks) */
+/*
+ * Menu built by header.js from the bulleted list authored in /nav.
+ * Colors, fonts and spacing use the BSDS tokens, with the library values as fallbacks.
+ * header.js adds the classes: header-nav-top (first-level button/link), header-nav-dropdown
+ * (simple submenu), header-nav-panel (submenu with columns), header-nav-mega (its item).
+ */
 .header .header-nav {
   font-family: var(--bsds-font-family-medium, sans-serif);
   font-size: var(--bsds-font-size-100, 1rem);
@@ -26,6 +36,29 @@ body > header {
   margin: 0;
 }
 
+.header .header-nav a {
+  color: var(--bsds-color-text, #414244);
+  text-decoration: none;
+}
+
+.header .header-nav .header-nav-dropdown a {
+  display: block;
+  margin: calc(-1 * var(--bsds-padding-50, 8px)) calc(-1 * var(--bsds-padding-100, 16px));
+  padding: var(--bsds-padding-50, 8px) var(--bsds-padding-100, 16px);
+}
+
+.header .header-nav .header-nav-panel a {
+  display: block;
+  padding: var(--bsds-padding-50, 8px) 0;
+  border-bottom: 1px solid var(--bsds-color-border-divider, #e2e2e3);
+  font-family: var(--bsds-font-family-regular, sans-serif);
+}
+
+.header .header-nav a:hover {
+  color: var(--bsds-color-primary-text, #cc092f);
+}
+
+/* first level */
 .header .header-nav > ul {
   display: flex;
   flex-wrap: wrap;
@@ -39,9 +72,12 @@ body > header {
   align-items: center;
 }
 
-/* first-level links and buttons share the same look, so all items line up */
-.header .header-nav > ul > li a,
-.header .header-nav > ul > li > button {
+/* the panel is placed against the whole header, not against its item */
+.header .header-nav .header-nav-mega {
+  position: static;
+}
+
+.header .header-nav .header-nav-top {
   display: flex;
   align-items: center;
   gap: var(--bsds-margin-50, 8px);
@@ -50,40 +86,36 @@ body > header {
   background: none;
   color: var(--bsds-color-text, #414244);
   font: inherit;
-  text-decoration: none;
   cursor: pointer;
 }
 
-/* a submenu link fills the whole item, so the full row is clickable */
-.header .header-nav li > ul > li a {
-  display: block;
-  margin: calc(-1 * var(--bsds-padding-50, 8px)) calc(-1 * var(--bsds-padding-100, 16px));
-  padding: var(--bsds-padding-50, 8px) var(--bsds-padding-100, 16px);
-}
-
-.header .header-nav > ul > li a:hover,
-.header .header-nav > ul > li > button:hover,
-.header .header-nav > ul > li > button[aria-expanded='true'] {
+.header .header-nav .header-nav-top:hover,
+.header .header-nav .header-nav-top[aria-expanded='true'] {
   color: var(--bsds-color-primary-text, #cc092f);
 }
 
-.header .header-nav button bsds-icon {
+/* icons */
+.header .header-nav .header-nav-group-title bsds-icon {
+  font-size: 20px;
+  color: var(--bsds-color-primary-text, #cc092f);
+}
+
+.header .header-nav .header-nav-top bsds-icon {
   font-size: 16px;
   transition: transform 0.2s ease;
 }
 
-/* arrow points up while the submenu is open */
-.header .header-nav button[aria-expanded='true'] bsds-icon {
+/* the arrow points up while the submenu is open */
+.header .header-nav .header-nav-top[aria-expanded='true'] bsds-icon {
   transform: rotate(180deg);
 }
 
-/* submenu: hidden until the button before it is expanded */
-.header .header-nav li > ul {
+/* simple submenu: hidden until its button is expanded */
+.header .header-nav .header-nav-dropdown {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 10;
   min-width: 240px;
   padding: var(--bsds-padding-50, 8px) 0;
   border-radius: var(--bsds-border-radius-sm, 8px);
@@ -92,18 +124,45 @@ body > header {
   font-family: var(--bsds-font-family-regular, sans-serif);
 }
 
-.header .header-nav button[aria-expanded='true'] + ul {
-  display: block;
-}
-
-/* submenu items: styled on the <li>, so items with or without a link look the same */
-.header .header-nav li > ul > li {
+.header .header-nav .header-nav-dropdown > li {
   padding: var(--bsds-padding-50, 8px) var(--bsds-padding-100, 16px);
   color: var(--bsds-color-text, #414244);
 }
 
-.header .header-nav li > ul > li:hover {
+.header .header-nav .header-nav-dropdown > li:hover {
   background: var(--bsds-color-surface-alternative, #f1f1f1);
+}
+
+/* panel with columns: full header width, hidden until its button is expanded */
+.header .header-nav .header-nav-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
+  gap: var(--bsds-padding-150, 24px) var(--bsds-margin-200, 32px);
+
+  /* side padding lines the columns up with a centered 1200px content area */
+  padding: var(--bsds-padding-150, 24px) max(var(--bsds-padding-200, 32px), calc((100% - 1200px) / 2));
+  background: var(--bsds-color-surface-default, #fff);
+  box-shadow: var(--bsds-shadow-down-md, 0 1px 8px) var(--bsds-shadow, rgb(0 0 0 / 20%));
+}
+
+.header .header-nav .header-nav-group-title {
+  display: flex;
+  align-items: center;
+  gap: var(--bsds-margin-50, 8px);
+  padding-bottom: var(--bsds-padding-50, 8px);
+  color: var(--bsds-color-text, #414244);
+}
+
+.header .header-nav [aria-expanded='true'] + .header-nav-dropdown {
+  display: block;
+}
+
+.header .header-nav [aria-expanded='true'] + .header-nav-panel {
+  display: grid;
 }
 
 @media (width >= 900px) {
