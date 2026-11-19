@@ -13,8 +13,21 @@ function closeAll(nav, except) {
 }
 
 /**
- * Turns the authored nested list into a menu. A first-level item with a sublist gets
- * a toggle button; a first-level item without a sublist stays as a plain link.
+ * Creates the BSDS arrow used in the toggle buttons.
+ * Decorative: the open/closed state is given by aria-expanded on the button.
+ * @returns {Element} the <bsds-icon>
+ */
+function createArrow() {
+  const arrow = document.createElement('bsds-icon');
+  arrow.setAttribute('name', 'icon-seta-baixo');
+  arrow.setAttribute('aria-hidden', 'true');
+  return arrow;
+}
+
+/**
+ * Turns the authored nested list into a menu. A first-level item with a sublist becomes
+ * a toggle button (it only opens the submenu, it doesn't navigate: a link authored on its
+ * label is dropped). A first-level item without a sublist stays as it was authored.
  * The list itself is not rebuilt: the authored <ul>/<li> are reused as they are.
  * @param {Element} list The authored <ul>
  * @returns {Element} the <nav>
@@ -29,26 +42,19 @@ function buildNav(list) {
     const submenu = item.querySelector(':scope > ul');
     if (!submenu) return;
 
-    // the label is everything before the nested list ("Produtos")
-    const label = [...item.childNodes]
+    const button = document.createElement('button');
+    button.type = 'button';
+    // the label is everything before the nested list ("Produtos"); textContent also keeps
+    // the text of a link the author may have put on it, without the link itself
+    button.textContent = [...item.childNodes]
       .filter((node) => node !== submenu)
       .map((node) => node.textContent)
       .join('')
       .trim();
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = label;
+    button.append(createArrow());
     button.setAttribute('aria-expanded', 'false');
     submenu.id = `header-submenu-${i}`;
     button.setAttribute('aria-controls', submenu.id);
-
-    // BSDS arrow (decorative: the open/closed state is given by aria-expanded)
-    const arrow = document.createElement('bsds-icon');
-    arrow.setAttribute('name', 'icon-seta-baixo');
-    arrow.setAttribute('aria-hidden', 'true');
-    button.append(arrow);
-
     button.addEventListener('click', () => {
       const open = button.getAttribute('aria-expanded') === 'true';
       closeAll(nav, button);
@@ -85,13 +91,23 @@ export default async function decorate(block) {
   if (!fragment) return;
 
   // loadFragment already decorated the bsds-header block, so <bsds-simple-header> exists here.
-  // The menu goes into its "bottom" slot. The BSDS library itself is loaded by bsds-header.
+  // The menu goes inside it. The BSDS library itself is loaded by bsds-header.
   const list = fragment.querySelector('.default-content-wrapper > ul');
   const simpleHeader = fragment.querySelector('bsds-simple-header');
   if (list && simpleHeader) {
     const listWrapper = list.parentElement;
     const nav = buildNav(list);
-    nav.slot = 'bottom';
+
+    // desktop: default slot, on the same row as the logo
+    // smaller screens: "bottom" slot, on a row below the logo
+    const isDesktop = window.matchMedia('(min-width: 900px)');
+    const placeNav = () => {
+      if (isDesktop.matches) nav.removeAttribute('slot');
+      else nav.slot = 'bottom';
+    };
+    placeNav();
+    isDesktop.addEventListener('change', placeNav);
+
     simpleHeader.append(nav);
     // drop the wrapper the list came from, if nothing else was authored in it
     if (!listWrapper.children.length) listWrapper.remove();

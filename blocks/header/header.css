@@ -2,53 +2,74 @@ header .header {
   width: 100%;
 }
 
-/* the menu row makes the header taller than --nav-height (styles.css): let it grow */
+/* on smaller screens the menu row makes the header taller than --nav-height: let it grow */
 body > header {
   height: auto;
   min-height: var(--nav-height);
 }
 
-/* menu built by header.js from the bulleted list authored in /nav */
+/* menu built by header.js from the bulleted list authored in /nav (BSDS tokens, with fallbacks) */
+.header .header-nav {
+  font-family: var(--bsds-font-family-medium, sans-serif);
+  font-size: var(--bsds-font-size-100, 1rem);
+  line-height: var(--bsds-font-line-height-100, 1.5rem);
+}
+
 .header .header-nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* the rich text editor may wrap item contents in <p>: drop the global paragraph margins */
+.header .header-nav p {
+  margin: 0;
+}
+
 .header .header-nav > ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  align-items: center;
+  gap: 0 var(--bsds-margin-200, 32px);
 }
 
 .header .header-nav > ul > li {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.header .header-nav a,
-.header .header-nav button {
+/* first-level links and buttons share the same look, so all items line up */
+.header .header-nav > ul > li a,
+.header .header-nav > ul > li > button {
+  display: flex;
+  align-items: center;
+  gap: var(--bsds-margin-50, 8px);
+  border: 0;
+  padding: var(--bsds-padding-50, 8px) 0;
+  background: none;
   color: var(--bsds-color-text, #414244);
   font: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.header .header-nav button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  padding: 8px 0;
-  background: none;
-  cursor: pointer;
+/* a submenu link fills the whole item, so the full row is clickable */
+.header .header-nav li > ul > li a {
+  display: block;
+  margin: calc(-1 * var(--bsds-padding-50, 8px)) calc(-1 * var(--bsds-padding-100, 16px));
+  padding: var(--bsds-padding-50, 8px) var(--bsds-padding-100, 16px);
+}
+
+.header .header-nav > ul > li a:hover,
+.header .header-nav > ul > li > button:hover,
+.header .header-nav > ul > li > button[aria-expanded='true'] {
+  color: var(--bsds-color-primary-text, #cc092f);
 }
 
 .header .header-nav button bsds-icon {
   font-size: 16px;
   transition: transform 0.2s ease;
-}
-
-.header .header-nav button[aria-expanded='true'] {
-  color: var(--bsds-color-primary-surface, #cc092f);
 }
 
 /* arrow points up while the submenu is open */
@@ -63,21 +84,31 @@ body > header {
   top: 100%;
   left: 0;
   z-index: 10;
-  min-width: 200px;
-  padding: 8px 0;
+  min-width: 240px;
+  padding: var(--bsds-padding-50, 8px) 0;
+  border-radius: var(--bsds-border-radius-sm, 8px);
   background: var(--bsds-color-surface-default, #fff);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+  box-shadow: var(--bsds-shadow-down-md, 0 1px 8px) var(--bsds-shadow, rgb(0 0 0 / 20%));
+  font-family: var(--bsds-font-family-regular, sans-serif);
 }
 
 .header .header-nav button[aria-expanded='true'] + ul {
   display: block;
 }
 
-.header .header-nav li > ul a {
-  display: block;
-  padding: 8px 16px;
+/* submenu items: styled on the <li>, so items with or without a link look the same */
+.header .header-nav li > ul > li {
+  padding: var(--bsds-padding-50, 8px) var(--bsds-padding-100, 16px);
+  color: var(--bsds-color-text, #414244);
 }
 
-.header .header-nav li > ul a:hover {
+.header .header-nav li > ul > li:hover {
   background: var(--bsds-color-surface-alternative, #f1f1f1);
+}
+
+@media (width >= 900px) {
+  /* same row as the logo: keep some distance from it */
+  .header .header-nav {
+    margin-left: var(--bsds-margin-200, 32px);
+  }
 }
