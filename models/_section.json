@@ -52,7 +52,8 @@
         "columns",
         "fragment",
         "bsds-header",
-        "quick-access"
+        "quick-access",
+        "banner"
       ]
     }
   ]
