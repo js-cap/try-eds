@@ -1,0 +1,10 @@
+/*
+ * Full-bleed: cancel the centered column (max-width 1200px + side padding) that styles.css
+ * applies to every block wrapper ("main > .section > div"). The <bsds-banner> itself is
+ * already width: 100% in the BSDS styles.
+ */
+main .section > .banner-wrapper {
+  max-width: unset;
+  margin: 0;
+  padding: 0;
+}

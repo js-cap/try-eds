@@ -44,7 +44,7 @@
         {
           "component": "text",
           "name": "caption",
-          "label": "Imagem Desktop"
+          "label": "Texto da legenda"
         },
         {
             "component": "text",
